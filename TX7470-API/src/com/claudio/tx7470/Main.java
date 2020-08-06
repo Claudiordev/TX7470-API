@@ -61,7 +61,7 @@ public class Main {
                 count++;
             }
         } else {
-            System.out.print("Erro: Message sent, the last argument cannot be 0");
+            System.out.print("Error: Message sent, the last argument cannot be 0");
         }
 
     }
