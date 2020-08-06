@@ -23,16 +23,47 @@ public class Main {
         String arg3 = args[2];
         String arg4 = args[3];
         String arg5 = args[4];
+        String arg6 = args[5];
 
         //Convert the arguments into it's respective types
         ip = arg1; //IP of Transmitter
         Integer pager = Integer.valueOf(arg2); //Pager Number
-        String message = arg3; //Pager Message Text
+        String message = arg3; //Pager Message Text, Supported Caracters: https://pt.wikipedia.org/wiki/ISO/IEC_8859-1
         String type = arg4; //Pager Type, consonant the Pager Hardware Used, Example: RX-SP4 = AlphaCoaster, reference: https://paging-systems.readme.io/docs/netpage-service#section-pager-sub-element
         int system_id = Integer.valueOf(arg5); //System ID Defined on the TX-7470
-
+        int times = Integer.valueOf(arg6); //Number of times to repeat the message, if none use just "1";
 
         initCommunication(ip, pager, message, type, system_id); //Call of communication
+        System.out.print("\n" + "Sent (1): \n" + "IP:" + ip + "\n" + "Pager Number: " + pager + "\n" + "Message: " + message + "\n" + "Type of Pager: " + type + "\n" + "System ID: " + system_id + "\n");
+
+        /**
+         * Repeat system used to repeat the messages the amount of times choosen
+         */
+        if (!arg6.equals("0")) {
+            int count = 0;
+            //Repeat System
+            //new RepeatSystem(ip, pager, message, type, system_id, times).start();
+            while (true) {
+
+                if (count >= (times - 1)) {
+                    break;
+                }
+
+                try {
+                    Thread.sleep(31000);
+                }  catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                initCommunication(ip, pager, message, type, system_id); //Call of communication
+                System.out.print("\n" + "Sent" + " (" + (count +1) +"):" +  "\n" + "IP:" + ip + "\n" + "Pager Number: " + pager + "\n" + "Message: " + message + "\n" + "Type of Pager: " + type + "\n" + "System ID: " + system_id + "\n");
+
+                count++;
+            }
+        } else {
+            System.out.print("Erro: Message sent, the last argument cannot be 0");
+        }
+
     }
 
     private static void initCommunication(String ip, int pager, String message, String type, int system_id) {
